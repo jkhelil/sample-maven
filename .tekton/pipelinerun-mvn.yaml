@@ -7,7 +7,7 @@ spec:
     name: maven-build
   params:
     - name: git-repo
-      value: https://github.com/jenkinsci/kubernetes-plugin.git
+      value: https://github.com/jkhelil/sample-maven.git
     - name: git-revision
       value: main
   workspaces:
