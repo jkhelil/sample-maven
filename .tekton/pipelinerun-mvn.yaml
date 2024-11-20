@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: maven-run-
+spec:
+  pipelineRef:
+    name: maven-build
+  params:
+    - name: git-repo
+      value: https://github.com/jenkinsci/kubernetes-plugin.git
+    - name: git-revision
+      value: main
+  workspaces:
+    - name: shared
+      emptyDir: {}

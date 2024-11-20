@@ -1,0 +1,64 @@
+---
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: maven-task
+spec:
+  workspaces:
+    - name: source
+  steps:
+    - name: build-step
+      image: maven:3-alpine
+      workingDir: $(workspaces.source.path)
+      command:
+        - mvn
+      args:
+        - -B
+        - clean
+        - package
+        - -DskipTests
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: maven-build
+spec:
+  params:
+    - description: Repository URL to clone from.
+      name: git-repo
+      type: string
+    - default: main
+      description: Revision to checkout. (branch, tag, sha, ref, etc...)
+      name: git-revision
+      type: string
+  tasks:
+    - name: git-clone
+      taskRef:
+        resolver: cluster
+        params:
+        - name: kind
+          value: task
+        - name: name
+          value: git-clone
+        - name: namespace
+          value: tekton-pipelines
+      params:
+      - name: url
+        value: $(params.git-repo)
+      - name: revision
+        value: $(params.git-revision)
+      workspaces:
+      - name: output
+        workspace: shared
+    - name: maven-task
+      runAfter:
+      - git-clone
+      taskRef:
+        name: maven-task
+      workspaces:
+      - name: source
+        workspace: shared
+  workspaces:
+    - name: shared
+
+      
