@@ -11,5 +11,10 @@ spec:
     - name: git-revision
       value: main
   workspaces:
-    - name: shared
+    - name: shared-workspace
+      persistentvolumeclaim:
+        claimName: maven-source-pvc
+    - name: maven-settings
+      emptyDir: {}
+    - name: maven-local-m2
       emptyDir: {}
