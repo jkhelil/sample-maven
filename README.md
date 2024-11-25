@@ -63,3 +63,6 @@ controller-1: 128 task runs
 - Check output.json for taskruns distribution between controllers
 - The work for one single pipelinerun is distributed among the controllers.
 - Multiple killing of the controllers during the runs doesn't affect the taskruns completion
+- scaling down the statefulset to one replica, doesnt impact the workload
+
+
